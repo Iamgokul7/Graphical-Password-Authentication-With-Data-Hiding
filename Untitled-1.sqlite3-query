@@ -1,0 +1,12 @@
+-- database: ./users.db
+
+SELECT * FROM users;
+
+
+PRAGMA foreign_keys = OFF;
+
+DELETE FROM files;
+DELETE FROM requests;
+DELETE FROM users;
+
+PRAGMA foreign_keys = ON;

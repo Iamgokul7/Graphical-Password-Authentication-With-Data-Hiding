@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Secure File Viewer | {{ filename }}</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #4361ee;
+            --primary-light: #4895ef;
+            --secondary: #3f37c9;
+            --dark: #1a1a2e;
+            --light: #f8f9fa;
+            --gray: #6c757d;
+            --light-gray: #e9ecef;
+            --danger: #e63946;
+            --success: #4cc9f0;
+            --warning: #f8961e;
+            --border-radius: 12px;
+            --box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            --transition: all 0.3s ease;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f5f7fa;
+            color: var(--dark);
+            line-height: 1.6;
+        }
+        
+        .navbar {
+            background-color: white;
+            box-shadow: var(--box-shadow);
+            padding: 0 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 70px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .nav-brand {
+            display: flex;
+            align-items: center;
+            font-weight: 600;
+            font-size: 20px;
+            color: var(--primary);
+        }
+        
+        .nav-brand i {
+            margin-right: 10px;
+            font-size: 22px;
+        }
+        
+        .nav-links {
+            display: flex;
+            align-items: center;
+        }
+        
+        .nav-links a {
+            color: var(--dark);
+            text-decoration: none;
+            padding: 10px 15px;
+            margin: 0 5px;
+            font-weight: 500;
+            border-radius: var(--border-radius);
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+        }
+        
+        .nav-links a i {
+            margin-right: 8px;
+        }
+        
+        .nav-links a:hover {
+            background-color: var(--primary);
+            color: white;
+        }
+        
+        .nav-links a.active {
+            background-color: rgba(67, 97, 238, 0.1);
+            color: var(--primary);
+        }
+        
+        .user-profile {
+            display: flex;
+            align-items: center;
+            margin-left: 20px;
+        }
+        
+        .user-profile img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-right: 10px;
+            border: 2px solid var(--primary);
+        }
+        
+        .container {
+            max-width: 1000px;
+            margin: 30px auto;
+            padding: 0 20px;
+        }
+        
+        .file-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        
+        .file-title {
+            display: flex;
+            align-items: center;
+        }
+        
+        .file-title h1 {
+            font-size: 24px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+        }
+        
+        .file-title h1 i {
+            margin-right: 12px;
+            color: var(--primary);
+        }
+        
+        .file-meta {
+            color: var(--gray);
+            font-size: 14px;
+            margin-top: 5px;
+        }
+        
+        .file-content-container {
+            background-color: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            padding: 25px;
+            margin-bottom: 30px;
+            position: relative;
+        }
+        
+        .file-content {
+            width: 100%;
+            height: 500px;
+            padding: 15px;
+            border: 1px solid var(--light-gray);
+            border-radius: var(--border-radius);
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            line-height: 1.5;
+            resize: none;
+            background-color: #f8f9fa;
+            white-space: pre-wrap;
+            overflow-y: auto;
+        }
+        
+        .file-actions {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .btn {
+            padding: 12px 24px;
+            border-radius: var(--border-radius);
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 200px;
+        }
+        
+        .btn-primary {
+            background-color: var(--primary);
+            color: white;
+            border: none;
+        }
+        
+        .btn-primary:hover {
+            background-color: var(--secondary);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(67, 97, 238, 0.3);
+        }
+        
+        .btn-secondary {
+            background-color: white;
+            color: var(--primary);
+            border: 1px solid var(--primary);
+        }
+        
+        .btn-secondary:hover {
+            background-color: #f0f7ff;
+            transform: translateY(-2px);
+        }
+        
+        .btn i {
+            margin-right: 8px;
+        }
+        
+        .security-banner {
+            background-color: rgba(67, 97, 238, 0.1);
+            border-left: 4px solid var(--primary);
+            padding: 15px;
+            border-radius: var(--border-radius);
+            margin-bottom: 30px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .security-banner i {
+            color: var(--primary);
+            font-size: 20px;
+            margin-right: 15px;
+        }
+        
+        .security-banner p {
+            flex: 1;
+            font-size: 14px;
+        }
+        
+        .copy-notification {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: var(--success);
+            color: white;
+            padding: 12px 24px;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            z-index: 1000;
+            display: none;
+            align-items: center;
+        }
+        
+        .copy-notification i {
+            margin-right: 10px;
+        }
+        
+        @media (max-width: 768px) {
+            .navbar {
+                flex-direction: column;
+                height: auto;
+                padding: 15px;
+            }
+            
+            .nav-links {
+                margin-top: 15px;
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            
+            .user-profile {
+                margin: 15px 0 0;
+            }
+            
+            .file-actions {
+                flex-direction: column;
+            }
+            
+            .btn {
+                width: 100%;
+            }
+            
+            .file-content {
+                height: 400px;
+            }
+        }
+    </style>
+</head>
+        <nav class="navbar">
+            <div class="nav-brand">
+                <i class="fas fa-lock"></i>
+                <span>SecureVault</span>
+            </div>
+            
+            <div class="nav-links">
+                <a href="/dashboard"><i class="fas fa-home"></i> Home</a>
+                <a href="/file_upload"><i class="fas fa-upload"></i> Upload</a>
+                <a href="/request_file"><i class="fas fa-file-download"></i> Request</a>
+                <a href="/settings"><i class="fas fa-cog"></i> Settings</a>
+                
+                <div class="user-profile">
+                    <img src="https://cdn-icons-png.flaticon.com/512/847/847969.png" width="64" height="64" alt="User Icon">
+                    <span>Welcome User</span>
+                </div>
+            </div>
+        </nav>
+        
+        <div class="container">
+            <div class="file-header">
+                <div>
+                    <div class="file-title">
+                        <h1><i class="fas fa-file-alt"></i> {{ filename }}</h1>
+                    </div>
+                    <div class="file-meta">
+                        Viewed on {{ current_date }} | Securely decrypted for your session
+                    </div>
+                </div>
+            </div>
+            
+            <div class="security-banner">
+                <i class="fas fa-shield-alt"></i>
+                <p>
+                    <strong>Security Notice:</strong> This file was decrypted for viewing only. 
+                    The content is not stored in this form and will need to be re-decrypted for future access.
+                </p>
+            </div>
+            
+            {% if display_type == 'text' %}
+            <div class="file-content-container">
+                <textarea id="fileContent" class="file-content" readonly>{{ file_content }}</textarea>
+            </div>
+            {% elif display_type == 'image' %}
+            <div class="file-content-container image-container">
+                <img src="data:image/{{ file_ext }};base64,{{ file_content }}" alt="{{ filename }}" class="preview-image">
+            </div>
+            {% else %}
+            <div class="file-content-container binary-container">
+                <div class="binary-info">
+                    <i class="fas fa-file-download"></i>
+                    <p>This file type cannot be displayed in the browser.</p>
+                    <p>Please download the file to view its contents.</p>
+                </div>
+            </div>
+            {% endif %}
+            
+            <div class="file-actions">
+               
+               <!-- Download button for all file types -->
+    <a href="{{ url_for('download_file', file_id=file_id) }}" class="btn btn-primary">
+        <i class="fas fa-download"></i> Download File
+    </a>
+    
+    {% if display_type == 'text' %}
+    <button onclick="copyToClipboard()" class="btn btn-secondary">
+        <i class="fas fa-copy"></i> Copy Text
+    </button>
+
+    <button onclick="window.location.href='/request_file'" class="btn btn-secondary">
+        <i class="fas fa-arrow-left"></i> Back to Files
+    </button>
+
+
+            
+            
+            {% endif %}
+        </div>
+        
+        <script>
+            // Handle file download - now uses direct link for all file types
+            function downloadFile() {
+                window.location.href = '/download_file/' + {{ file_id }};
+            }
+            
+            {% if display_type == 'text' %}
+            // Copy text content to clipboard
+            function copyToClipboard() {
+                const content = document.getElementById('fileContent');
+                content.select();
+                document.execCommand('copy');
+                
+                // Show notification
+                const notification = document.getElementById('copyNotification');
+                notification.style.display = 'flex';
+                setTimeout(() => {
+                    notification.style.display = 'none';
+                }, 3000);
+            }
+            
+            // Auto-resize textarea to fit content
+            function adjustTextareaHeight() {
+                const textarea = document.getElementById('fileContent');
+                textarea.style.height = 'auto';
+                textarea.style.height = (textarea.scrollHeight) + 'px';
+            }
+            
+            // Initial adjustment and event listeners for text files
+            window.addEventListener('load', adjustTextareaHeight);
+            
+            // Optional: Auto-adjust when window resizes
+            window.addEventListener('resize', adjustTextareaHeight);
+            {% endif %}
+            
+            {% if display_type == 'image' %}
+            // Image-specific functions can be added here if needed
+            function zoomImage(zoomIn) {
+                const img = document.querySelector('.preview-image');
+                const currentWidth = img.clientWidth;
+                const newWidth = zoomIn ? currentWidth * 1.2 : currentWidth / 1.2;
+                img.style.width = `${newWidth}px`;
+            }
+            {% endif %}
+        </script>
+    
+        <style>
+            /* Additional styles for the new elements */
+            .image-container {
+                text-align: center;
+                margin: 20px 0;
+                padding: 20px;
+                background-color: #f8f9fa;
+                border-radius: 8px;
+            }
+            
+            .preview-image {
+                max-width: 100%;
+                max-height: 500px;
+                border-radius: 4px;
+                box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            }
+            
+            .binary-container {
+                text-align: center;
+                padding: 40px 20px;
+                background-color: #f8f9fa;
+                border-radius: 8px;
+                margin: 20px 0;
+            }
+            
+            .binary-info {
+                color: #6c757d;
+            }
+            
+            .binary-info i {
+                font-size: 48px;
+                margin-bottom: 15px;
+                color: #4361ee;
+            }
+        </style>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>View File</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .container { max-width: 800px; margin: auto; }
+        textarea { width: 100%; height: 300px; margin: 10px 0; }
+        .btn { 
+            background: #007bff; 
+            color: white; 
+            padding: 10px 15px; 
+            border: none; 
+            cursor: pointer; 
+            margin-right: 10px;
+        }
+        .nav { background: #333; overflow: hidden; margin-bottom: 20px; }
+        .nav a { float: left; color: white; padding: 14px 16px; text-decoration: none; }
+    </style>
+</head>
+<body>
+    <div class="nav">
+        <a href="/dashboard">Home</a>
+        <a href="/file_upload">Upload File</a>
+        <a href="/request_file">Request File</a>
+        <a href="/logout">Logout</a>
+    </div>
+    <div class="container">
+        <h1>File: {{ filename }}</h1>
+        <textarea readonly>{{ decrypted_text }}</textarea>
+        <button onclick="downloadFile()" class="btn">Download as Text File</button>
+        <button onclick="window.location.href='/request_file'" class="btn">Back to Files</button>
+    </div>
+
+    <script>
+        function downloadFile() {
+            const content = `{{ decrypted_text }}`;
+            const blob = new Blob([content], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = '{{ filename }}.txt';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        }
+    </script>
+</body>
+</html> -->

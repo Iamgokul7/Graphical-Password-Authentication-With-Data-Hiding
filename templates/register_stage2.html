@@ -1,0 +1,661 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registration - Stage 2</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #4361ee;
+            --secondary-color: #3f37c9;
+            --accent-color: #4895ef;
+            --light-color: #f8f9fa;
+            --dark-color: #212529;
+            --success-color: #4cc9f0;
+            --border-radius: 12px;
+            --box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+            --transition: all 0.3s ease;
+        }
+        
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f5f7ff;
+            color: var(--dark-color);
+            line-height: 1.6;
+            padding: 0;
+            margin: 0;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        
+        .registration-header {
+            text-align: center;
+            margin-bottom: 2.5rem;
+        }
+        
+        .registration-header h1 {
+            color: var(--primary-color);
+            font-size: 2.2rem;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+        }
+        
+        .registration-header p {
+            color: #666;
+            font-size: 1rem;
+        }
+        
+        .registration-progress {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 2rem;
+        }
+        
+        .progress-step {
+            display: flex;
+            align-items: center;
+            position: relative;
+            padding: 0 1.5rem;
+        }
+        
+        .progress-step:not(:last-child):after {
+            content: '';
+            position: absolute;
+            right: 0;
+            height: 2px;
+            width: 30px;
+            background-color: #ddd;
+        }
+        
+        .step-number {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background-color: #ddd;
+            color: #666;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 500;
+            margin-right: 0.5rem;
+            transition: var(--transition);
+        }
+        
+        .step-text {
+            font-size: 0.9rem;
+            color: #666;
+        }
+        
+        .progress-step.active .step-number {
+            background-color: var(--primary-color);
+            color: white;
+        }
+        
+        .progress-step.active .step-text {
+            color: var(--primary-color);
+            font-weight: 500;
+        }
+        
+        .registration-content {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 2rem;
+            background: white;
+            border-radius: var(--border-radius);
+            padding: 2.5rem;
+            box-shadow: var(--box-shadow);
+        }
+        
+        .registration-panel {
+            flex: 1;
+            min-width: 300px;
+        }
+        
+        .panel-title {
+            font-size: 1.3rem;
+            color: var(--primary-color);
+            margin-bottom: 1.5rem;
+            font-weight: 500;
+            position: relative;
+            padding-bottom: 0.5rem;
+        }
+        
+        .panel-title:after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 50px;
+            height: 3px;
+            background-color: var(--accent-color);
+            border-radius: 3px;
+        }
+        
+        .pin-display {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+        
+        .pin-box {
+            width: 60px;
+            height: 80px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            font-weight: 500;
+            color: #666;
+            background-color: #f9f9f9;
+            transition: var(--transition);
+        }
+        
+        .pin-box.filled {
+            border-color: var(--primary-color);
+            color: var(--primary-color);
+            background-color: rgba(67, 97, 238, 0.05);
+            box-shadow: 0 4px 8px rgba(67, 97, 238, 0.1);
+        }
+        
+        .pin-box.empty {
+            color: #ccc;
+        }
+        
+        .num-pad {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1rem;
+            max-width: 350px;
+            margin: 0 auto;
+        }
+        
+        .num-btn {
+            width: 100%;
+            height: 60px;
+            border: none;
+            border-radius: var(--border-radius);
+            background-color: white;
+            color: var(--dark-color);
+            font-size: 1.5rem;
+            font-weight: 500;
+            cursor: pointer;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .num-btn:hover {
+            background-color: var(--light-color);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+        }
+        
+        .num-btn:active {
+            transform: translateY(0);
+        }
+        
+        .num-btn.zero {
+            grid-column: span 3;
+            height: 50px;
+        }
+        
+        .btn-submit {
+            display: block;
+            width: 100%;
+            max-width: 300px;
+            margin: 2rem auto 0;
+            padding: 1rem;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: var(--border-radius);
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: var(--transition);
+            box-shadow: 0 4px 12px rgba(67, 97, 238, 0.3);
+        }
+        
+        .btn-submit:hover {
+            background-color: var(--secondary-color);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(67, 97, 238, 0.4);
+        }
+        
+        .btn-submit:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+        
+        .selected-images {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-top: 2rem;
+            flex-wrap: wrap;
+        }
+        
+        .selected-image {
+            width: 80px;
+            height: 80px;
+            border-radius: 8px;
+            object-fit: cover;
+            border: 3px solid #e0e0e0;
+            transition: var(--transition);
+            opacity: 0;
+            transform: scale(0.9);
+        }
+        
+        .selected-image.visible {
+            opacity: 1;
+            transform: scale(1);
+            border-color: var(--accent-color);
+        }
+        
+        .image-preview-title {
+            text-align: center;
+            margin-top: 1.5rem;
+            color: #666;
+            font-size: 0.9rem;
+        }
+        
+        form {
+            width: 100%;
+        }
+        
+        .hidden-input {
+            display: none;
+        }
+        
+        @media (max-width: 768px) {
+            .registration-content {
+                flex-direction: column;
+                padding: 1.5rem;
+            }
+            
+            .pin-box {
+                width: 50px;
+                height: 70px;
+            }
+            
+            .num-pad {
+                max-width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="registration-header">
+            <h1>Set Your Steganography PIN</h1>
+            <p>Create a 4-digit PIN that will be used to hide and retrieve your secret messages</p>
+        </div>
+        
+        <div class="registration-progress">
+            <div class="progress-step">
+                <div class="step-number">1</div>
+                <div class="step-text">Account Info</div>
+            </div>
+            <div class="progress-step active">
+                <div class="step-number">2</div>
+                <div class="step-text">Stego PIN</div>
+            </div>
+            <div class="progress-step">
+                <div class="step-number">3</div>
+                <div class="step-text">Complete</div>
+            </div>
+        </div>
+        
+        <div class="registration-content">
+            <div class="registration-panel">
+                <h2 class="panel-title">Enter Your PIN</h2>
+                <div class="pin-display">
+                    <div class="pin-box empty" id="pin1">?</div>
+                    <div class="pin-box empty" id="pin2">?</div>
+                    <div class="pin-box empty" id="pin3">?</div>
+                    <div class="pin-box empty" id="pin4">?</div>
+                </div>
+                
+                <form method="POST" action="/register_stego">
+                    <input type="hidden" name="stego_pin" id="stego_pin" required>
+                    <button type="submit" class="btn-submit" id="submitBtn" disabled>Confirm PIN</button>
+                </form>
+            </div>
+            
+            <div class="registration-panel">
+                <h2 class="panel-title">Number Pad</h2>
+                <div class="num-pad">
+                    <button class="num-btn" onclick="addToPin(1)">1</button>
+                    <button class="num-btn" onclick="addToPin(2)">2</button>
+                    <button class="num-btn" onclick="addToPin(3)">3</button>
+                    <button class="num-btn" onclick="addToPin(4)">4</button>
+                    <button class="num-btn" onclick="addToPin(5)">5</button>
+                    <button class="num-btn" onclick="addToPin(6)">6</button>
+                    <button class="num-btn" onclick="addToPin(7)">7</button>
+                    <button class="num-btn" onclick="addToPin(8)">8</button>
+                    <button class="num-btn" onclick="addToPin(9)">9</button>
+                    <button class="num-btn zero" onclick="addToPin(0)">0</button>
+                </div>
+                
+                <p class="image-preview-title">Your PIN Visual Representation</p>
+                <div class="selected-images">
+                    <img class="selected-image" id="img1" src="" alt="PIN Image 1">
+                    <img class="selected-image" id="img2" src="" alt="PIN Image 2">
+                    <img class="selected-image" id="img3" src="" alt="PIN Image 3">
+                    <img class="selected-image" id="img4" src="" alt="PIN Image 4">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const imagePaths = {
+            1: "static/iamge1.jpg",
+            2: "static/image2.jpg",
+            3: "static/image3.jpg",
+            4: "static/image4.png",
+            5: "static/image5.jpg",
+            6: "static/image6.png",
+            7: "static/image7.jpg",
+            8: "static/image8.jpg",
+            9: "static/image9.png",
+            0: "static/image10.jpg"
+        };
+
+        let pin = [];
+        
+        function addToPin(num) {
+            if (pin.length < 4) {
+                pin.push(num);
+                updatePinDisplay();
+                updateImagesDisplay();
+                
+                // Enable submit button when PIN is complete
+                if (pin.length === 4) {
+                    document.getElementById("submitBtn").disabled = false;
+                }
+            }
+        }
+        
+        function updatePinDisplay() {
+            for (let i = 0; i < 4; i++) {
+                const pinBox = document.getElementById(`pin${i+1}`);
+                if (i < pin.length) {
+                    pinBox.textContent = pin[i];
+                    pinBox.classList.add("filled");
+                    pinBox.classList.remove("empty");
+                } else {
+                    pinBox.textContent = "?";
+                    pinBox.classList.add("empty");
+                    pinBox.classList.remove("filled");
+                }
+            }
+            document.getElementById("stego_pin").value = pin.join('');
+        }
+        
+        function updateImagesDisplay() {
+            for (let i = 0; i < 4; i++) {
+                const imgElement = document.getElementById(`img${i+1}`);
+                if (i < pin.length) {
+                    imgElement.src = imagePaths[pin[i]];
+                    imgElement.classList.add("visible");
+                } else {
+                    imgElement.classList.remove("visible");
+                }
+            }
+        }
+        
+        // Optional: Add keyboard support
+        document.addEventListener('keydown', function(event) {
+            const key = event.key;
+            if (/^[0-9]$/.test(key)) {
+                addToPin(parseInt(key));
+            } else if (key === 'Backspace' && pin.length > 0) {
+                pin.pop();
+                updatePinDisplay();
+                updateImagesDisplay();
+                document.getElementById("submitBtn").disabled = true;
+            }
+        });
+    </script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Registration - Stage 2</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .container { display: flex; }
+        .left, .right { flex: 1; padding: 20px; }
+        .pin-box { 
+            width: 50px; height: 50px; 
+            border: 1px solid #000; 
+            display: inline-block; 
+            text-align: center; 
+            line-height: 50px; 
+            margin: 5px; 
+        }
+        .num-btn { 
+            width: 50px; height: 50px; 
+            margin: 5px; 
+            font-size: 20px; 
+            cursor: pointer; 
+        }
+        #selected-images {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+        #selected-images img {
+            width: 100px;
+            height: 100px;
+            border: 2px solid #007bff;
+            border-radius: 5px;
+        }
+        .btn {
+            background: #007bff;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Register - Stage 2 (Set Steganography PIN)</h1>
+    <div class="container">
+        <div class="left">
+            <h3>Enter 4-Digit PIN:</h3>
+            <div id="pin-display">
+                <div class="pin-box" id="pin1">?</div>
+                <div class="pin-box" id="pin2">?</div>
+                <div class="pin-box" id="pin3">?</div>
+                <div class="pin-box" id="pin4">?</div>
+            </div>
+            <form method="POST" action="/register_stego">
+                <input type="hidden" name="stego_pin" id="stego_pin" required>
+                <button type="submit" class="btn">Submit</button>
+            </form>
+        </div>
+        <div class="right">
+            <h3>Click Numbers to Set PIN:</h3>
+            <button class="num-btn" onclick="addToPin(1)">1</button>
+            <button class="num-btn" onclick="addToPin(2)">2</button>
+            <button class="num-btn" onclick="addToPin(3)">3</button><br>
+            <button class="num-btn" onclick="addToPin(4)">4</button>
+            <button class="num-btn" onclick="addToPin(5)">5</button>
+            <button class="num-btn" onclick="addToPin(6)">6</button><br>
+            <button class="num-btn" onclick="addToPin(7)">7</button>
+            <button class="num-btn" onclick="addToPin(8)">8</button>
+            <button class="num-btn" onclick="addToPin(9)">9</button><br>
+            <button class="num-btn" onclick="addToPin(0)">0</button>
+
+            <h3>Selected Images:</h3>
+            <div id="selected-images">
+                <img id="img1" src="" alt="PIN Image 1" style="display: none;">
+                <img id="img2" src="" alt="PIN Image 2" style="display: none;">
+                <img id="img3" src="" alt="PIN Image 3" style="display: none;">
+                <img id="img4" src="" alt="PIN Image 4" style="display: none;">
+            </div>
+        </div>
+    </div>
+
+    <script>
+       
+        const imagePaths = {
+    1: "static/iamge1.jpg",
+    2: "static/image2.jpg",
+    3: "static/image3.jpg",
+    4: "static/image4.png",
+    5: "static/image5.jpg",
+    6: "static/image6.png",
+    7: "static/image7.jpg",
+    8: "static/image8.jpg",
+    9: "static/image9.png",
+    0: "static/image10.jpg"
+};
+
+
+        let pin = [];
+        function addToPin(num) {
+            if (pin.length < 4) {
+                pin.push(num);
+                const pinPosition = pin.length;
+                document.getElementById(`pin${pinPosition}`).textContent = num;
+                document.getElementById("stego_pin").value = pin.join('');
+                
+                // Show the corresponding image
+                const imgElement = document.getElementById(`img${pinPosition}`);
+                imgElement.src = imagePaths[num];
+                imgElement.style.display = "block";
+            }
+        }
+    </script>
+</body>
+</html> -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Registration - Stage 2</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .container { display: flex; }
+        .left, .right { flex: 1; padding: 20px; }
+        .pin-box { width: 50px; height: 50px; border: 1px solid #000; display: inline-block; text-align: center; line-height: 50px; margin: 5px; }
+        .num-btn { width: 50px; height: 50px; margin: 5px; font-size: 20px; cursor: pointer; }
+    </style>
+</head>
+<body>
+    <h1>Register - Stage 2 (Set Steganography PIN)</h1>
+    <div class="container">
+        <div class="left">
+            <h3>Enter 4-Digit PIN:</h3>
+            <div id="pin-display">
+                <div class="pin-box" id="pin1">?</div>
+                <div class="pin-box" id="pin2">?</div>
+                <div class="pin-box" id="pin3">?</div>
+                <div class="pin-box" id="pin4">?</div>
+            </div>
+            <form method="POST" action="/register_stego">
+                <input type="hidden" name="stego_pin" id="stego_pin" required>
+                <button type="submit" class="btn">Submit</button>
+            </form>
+        </div>
+        <div class="right">
+            <h3>Click Numbers to Set PIN:</h3>
+            <button class="num-btn" onclick="addToPin(1)">1</button>
+            <button class="num-btn" onclick="addToPin(2)">2</button>
+            <button class="num-btn" onclick="addToPin(3)">3"><br>
+            <button class="num-btn" onclick="addToPin(4)">4</button>
+            <button class="num-btn" onclick="addToPin(5)">5</button>
+            <button class="num-btn" onclick="addToPin(6)">6"><br>
+            <button class="num-btn" onclick="addToPin(7)">7</button>
+            <button class="num-btn" onclick="addToPin(8)">8</button>
+            <button class="num-btn" onclick="addToPin(9)">9"><br>
+            <button class="num-btn" onclick="addToPin(0)">0</button>
+        </div>
+    </div>
+    <script>
+        let pin = [];
+        function addToPin(num) {
+            if (pin.length < 4) {
+                pin.push(num);
+                document.getElementById(`pin${pin.length}`).textContent = num;
+                document.getElementById("stego_pin").value = pin.join('');
+            }
+        }
+    </script>
+</body>
+</html> -->

@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Stage 1</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #4361ee;
+            --primary-light: #4895ef;
+            --secondary: #3f37c9;
+            --dark: #1a1a2e;
+            --light: #f8f9fa;
+            --gray: #6c757d;
+            --danger: #e63946;
+            --border-radius: 8px;
+            --box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+            --transition: all 0.3s ease;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        
+        .login-container {
+            background-color: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            width: 100%;
+            max-width: 420px;
+            padding: 40px;
+            transition: var(--transition);
+        }
+        
+        .login-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .login-header h1 {
+            color: var(--dark);
+            font-weight: 600;
+            margin-bottom: 10px;
+            font-size: 28px;
+        }
+        
+        .login-header p {
+            color: var(--gray);
+            font-size: 14px;
+        }
+        
+        .login-form .form-group {
+            margin-bottom: 20px;
+            position: relative;
+        }
+        
+        .login-form .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: var(--dark);
+            font-weight: 500;
+            font-size: 14px;
+            text-align: left;
+        }
+        
+        .login-form .form-group input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #e0e0e0;
+            border-radius: var(--border-radius);
+            font-size: 14px;
+            transition: var(--transition);
+        }
+        
+        .login-form .form-group input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.2);
+        }
+        
+        .login-form .form-group input::placeholder {
+            color: #adb5bd;
+        }
+        
+        .btn {
+            width: 100%;
+            padding: 12px;
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            border-radius: var(--border-radius);
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: var(--transition);
+            margin-top: 10px;
+        }
+        
+        .btn:hover {
+            background-color: var(--secondary);
+            transform: translateY(-2px);
+        }
+        
+        .btn:active {
+            transform: translateY(0);
+        }
+        
+        .forgot-password {
+            text-align: right;
+            margin-top: -15px;
+            margin-bottom: 20px;
+        }
+        
+        .forgot-password a {
+            color: var(--gray);
+            font-size: 13px;
+            text-decoration: none;
+            transition: var(--transition);
+        }
+        
+        .forgot-password a:hover {
+            color: var(--primary);
+        }
+        
+        .divider {
+            display: flex;
+            align-items: center;
+            margin: 25px 0;
+            color: var(--gray);
+            font-size: 13px;
+        }
+        
+        .divider::before, .divider::after {
+            content: "";
+            flex: 1;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        
+        .divider::before {
+            margin-right: 10px;
+        }
+        
+        .divider::after {
+            margin-left: 10px;
+        }
+        
+        .social-login {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .social-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: white;
+            border: 1px solid #e0e0e0;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        
+        .social-btn:hover {
+            background-color: #f8f9fa;
+            transform: translateY(-2px);
+        }
+        
+        .signup-link {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 14px;
+            color: var(--gray);
+        }
+        
+        .signup-link a {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 500;
+        }
+        
+        @media (max-width: 480px) {
+            .login-container {
+                padding: 30px 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <div class="login-header">
+            <h1>Welcome Back</h1>
+            <p>Please enter your credentials to login</p>
+        </div>
+        
+        <form method="POST" action="/login" class="login-form">
+            <div class="form-group">
+                <label for="email">Email Address</label>
+                <input type="email" id="email" name="email" placeholder="Enter your email" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" placeholder="Enter your password" required>
+            </div>
+            
+            <div class="forgot-password">
+                <a href="#">Forgot password?</a>
+            </div>
+            
+            <button type="submit" class="btn">Login</button>
+            
+            <div class="divider">or continue with</div>
+            
+            <div class="social-login">
+                <div class="social-btn">
+                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M18.1712 8.36791H17.5V8.33332H10V11.6667H14.7095C14.0225 13.6071 12.1762 15 10 15C7.23875 15 5 12.7612 5 9.99999C5 7.23874 7.23875 4.99999 10 4.99999C11.4012 4.99999 12.6508 5.58624 13.5358 6.53207L15.8571 4.21082C14.5237 2.92374 12.425 2.16666 10 2.16666C5.39792 2.16666 1.66667 5.89791 1.66667 10.5C1.66667 15.1021 5.39792 18.8333 10 18.8333C14.6021 18.8333 18.3333 15.1021 18.3333 10.5C18.3333 9.74916 18.2417 9.01999 18.1712 8.36791Z" fill="#FFC107"/>
+                        <path d="M2.62708 6.12124L5.36541 8.12916C6.10625 6.29499 7.90041 4.99999 10 4.99999C11.4012 4.99999 12.6508 5.58624 13.5358 6.53207L15.8571 4.21082C14.5237 2.92374 12.425 2.16666 10 2.16666C6.79916 2.16666 4.02333 3.98874 2.62708 6.12124Z" fill="#FF3D00"/>
+                        <path d="M10 18.8333C12.3646 18.8333 14.4308 18.1146 15.7446 16.8937L13.1958 14.6283C12.3646 15.2954 11.2417 15.7083 10 15.7083C7.84041 15.7083 6.00958 14.3396 5.31041 12.4254L2.62083 14.5296C3.99041 17.7187 6.76125 19.4167 10 19.4167C14.6021 19.4167 18.3333 15.6854 18.3333 11.0833C18.3333 10.4021 18.2654 9.73541 18.1712 9.09458L18.0762 8.41833L15.7812 10.5946L15.5129 10.8529C14.3579 12.1479 12.63 12.9167 10.6946 12.9167H10" fill="#4CAF50"/>
+                        <path d="M18.1712 8.36791L18.0762 8.41833L15.7812 10.5946L15.5129 10.8529C15.5104 10.8504 15.5079 10.8479 15.5054 10.8454C15.5029 10.8429 15.5004 10.8404 15.4979 10.8379L18.1712 8.36791Z" fill="#1976D2"/>
+                        <path d="M5.31042 12.4254C5.09208 11.7929 4.96667 11.1187 4.96667 10.4167C4.96667 9.71458 5.09208 9.04041 5.31042 8.40791L2.62083 6.30374C1.99333 7.51458 1.66667 8.91458 1.66667 10.4167C1.66667 11.9187 1.99333 13.3187 2.62083 14.5296L5.31042 12.4254Z" fill="#1976D2"/>
+                    </svg>
+                </div>
+                <div class="social-btn">
+                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M18.8958 0H1.10417C0.494167 0 0 0.494167 0 1.10417V18.8958C0 19.5058 0.494167 20 1.10417 20H10.6833V12.255H8.07667V9.23667H10.6833V7.01083C10.6833 4.4275 12.2608 3.02083 14.5658 3.02083C15.67 3.02083 16.6183 3.10333 16.895 3.14V5.84L15.2967 5.84083C14.0433 5.84083 13.8008 6.43667 13.8008 7.31V9.2375H16.79L16.4008 12.2558H13.8008V20H18.8975C19.5058 20 20 19.5058 20 18.8958V1.10417C20 0.494167 19.5058 0 18.8958 0Z" fill="#1877F2"/>
+                    </svg>
+                </div>
+                <div class="social-btn">
+                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M10 1.90002C5.41833 1.90002 1.66667 5.65169 1.66667 10.2334C1.66667 14.3317 4.725 17.7884 8.69833 18.4059V12.4842H6.58167V10.2334H8.69833V8.50169C8.69833 6.51835 9.94333 5.36335 11.7717 5.36335C12.65 5.36335 13.5633 5.52669 13.5633 5.52669V7.47669H12.555C11.5617 7.47669 11.3 8.09335 11.3 8.72835V10.2334H13.4717L13.1183 12.4842H11.3V18.4167C15.2733 17.8 18.3333 14.3434 18.3333 10.2334C18.3333 5.65169 14.5817 1.90002 10 1.90002Z" fill="#1877F2"/>
+                    </svg>
+                </div>
+            </div>
+            
+            <div class="signup-link">
+                Don't have an account? <a href="#">Sign up</a>
+            </div>
+        </form>
+    </div>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+<!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Login - Stage 1</title>
+    <style>
+        body { font-family: Arial, sans-serif; text-align: center; margin-top: 50px; }
+        input { padding: 8px; margin: 5px; width: 200px; }
+        .btn { background: #007bff; color: white; padding: 10px 15px; border: none; cursor: pointer; }
+    </style>
+</head>
+<body>
+    <h1>Login - Stage 1</h1>
+    <form method="POST" action="/login">
+        <input type="email" name="email" placeholder="Email" required><br>
+        <input type="password" name="password" placeholder="Password" required><br>
+        <button type="submit" class="btn">Login</button>
+    </form>
+</body>
+</html> -->

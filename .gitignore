@@ -1,0 +1,27 @@
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+venv/
+env/
+myenv/
+myenv3.12/
+
+.vscode/
+.idea/
+
+*.log
+
+users.db
+
+*.sqlite
+*.sqlite3
+
+.DS_Store
+Thumbs.db
+
+
+static/uploads/
+static/zipfile.zip
+static/GOKUL P RESUME.pdf

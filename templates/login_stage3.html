@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Stage 3 (Steganography PIN)</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #4361ee;
+            --primary-light: #4895ef;
+            --secondary: #3f37c9;
+            --dark: #1a1a2e;
+            --light: #f8f9fa;
+            --gray: #6c757d;
+            --light-gray: #e9ecef;
+            --danger: #e63946;
+            --success: #4cc9f0;
+            --border-radius: 12px;
+            --box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            --transition: all 0.3s ease;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #e6e9f2 100%);
+            min-height: 100vh;
+            color: var(--dark);
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background-color: white;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            overflow: hidden;
+        }
+        
+        .header {
+            padding: 25px 30px;
+            background-color: var(--primary);
+            color: white;
+        }
+        
+        .header h1 {
+            font-weight: 600;
+            font-size: 24px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .header h1 i {
+            margin-right: 12px;
+            font-size: 22px;
+        }
+        
+        .header p {
+            opacity: 0.9;
+            font-size: 14px;
+            margin-top: 5px;
+        }
+        
+        .content {
+            display: flex;
+            flex-wrap: wrap;
+        }
+        
+        .left-panel, .right-panel {
+            flex: 1;
+            min-width: 300px;
+            padding: 30px;
+        }
+        
+        .left-panel {
+            border-right: 1px solid var(--light-gray);
+        }
+        
+        .panel-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 20px;
+            color: var(--dark);
+            display: flex;
+            align-items: center;
+        }
+        
+        .panel-title i {
+            margin-right: 10px;
+            color: var(--primary);
+        }
+        
+        .image-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+        }
+        
+        .img-btn {
+            width: 100%;
+            aspect-ratio: 1/1;
+            border-radius: var(--border-radius);
+            object-fit: cover;
+            cursor: pointer;
+            transition: var(--transition);
+            border: 2px solid var(--light-gray);
+            background-color: #f8f9fa;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+        
+        .img-btn:hover {
+            border-color: var(--primary);
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(67, 97, 238, 0.2);
+        }
+        
+        .img-btn.selected {
+            border-color: var(--success);
+            box-shadow: 0 0 0 3px rgba(76, 201, 240, 0.3);
+        }
+        
+        .img-btn img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .pin-display {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin: 30px 0;
+        }
+        
+        .pin-box {
+            width: 60px;
+            height: 60px;
+            border-radius: var(--border-radius);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+            font-weight: 600;
+            background-color: var(--light);
+            border: 2px solid var(--light-gray);
+            transition: var(--transition);
+        }
+        
+        .pin-box.filled {
+            border-color: var(--primary);
+            background-color: rgba(67, 97, 238, 0.1);
+            color: var(--primary);
+        }
+        
+        .pin-box.empty {
+            color: var(--gray);
+        }
+        
+        .form-container {
+            margin-top: 30px;
+        }
+        
+        .btn {
+            width: 100%;
+            padding: 14px;
+            border-radius: var(--border-radius);
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: var(--transition);
+            border: none;
+        }
+        
+        .btn-primary {
+            background-color: var(--primary);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background-color: var(--secondary);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(67, 97, 238, 0.3);
+        }
+        
+        .btn-primary:disabled {
+            background-color: var(--gray);
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+        
+        .btn-reset {
+            background-color: transparent;
+            color: var(--danger);
+            border: 1px solid var(--danger);
+            margin-top: 15px;
+        }
+        
+        .btn-reset:hover {
+            background-color: rgba(230, 57, 70, 0.1);
+        }
+        
+        .security-info {
+            background-color: #f8f9fa;
+            border-radius: var(--border-radius);
+            padding: 15px;
+            margin-top: 30px;
+            font-size: 13px;
+            color: var(--gray);
+            border-left: 3px solid var(--primary);
+        }
+        
+        .security-info i {
+            margin-right: 8px;
+            color: var(--primary);
+        }
+        
+        @media (max-width: 768px) {
+            .left-panel, .right-panel {
+                flex: 100%;
+            }
+            
+            .left-panel {
+                border-right: none;
+                border-bottom: 1px solid var(--light-gray);
+            }
+            
+            .pin-box {
+                width: 50px;
+                height: 50px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1><i class="fas fa-lock"></i> Steganography PIN Verification</h1>
+            <p>Select the 4 images containing your hidden PIN in the correct order</p>
+        </div>
+        
+        <div class="content">
+            <div class="left-panel">
+                <div class="panel-title"><i class="fas fa-images"></i> Select Your PIN Images</div>
+                
+                <div class="image-grid" id="image-grid">
+                    <div class="img-btn" onclick="selectImage(1)">
+                        <img src="../static/iamge1.jpg" alt="Image 1">
+                    </div>
+                    <div class="img-btn" onclick="selectImage(2)">
+                        <img src="../static/image2.jpg" alt="Image 2">
+                    </div>
+                    <div class="img-btn" onclick="selectImage(3)">
+                        <img src="../static/image3.jpg" alt="Image 3">
+                    </div>
+                    <div class="img-btn" onclick="selectImage(4)">
+                        <img src="../static/image4.png" alt="Image 4">
+                    </div>
+                    <div class="img-btn" onclick="selectImage(5)">
+                        <img src="../static/image5.jpg" alt="Image 5">
+                    </div>
+                    <div class="img-btn" onclick="selectImage(6)">
+                        <img src="../static/image6.png" alt="Image 6">
+                    </div>
+                    <div class="img-btn" onclick="selectImage(7)">
+                        <img src="../static/image7.jpg" alt="Image 7">
+                    </div>
+                    <div class="img-btn" onclick="selectImage(8)">
+                        <img src="../static/image8.jpg" alt="Image 8">
+                    </div>
+                    <div class="img-btn" onclick="selectImage(9)">
+                        <img src="../static/image9.png" alt="Image 9">
+                    </div>
+                    <div class="img-btn" onclick="selectImage(0)">
+                        <img src="../static/image10.jpg" alt="Image 0">
+                    </div>
+                </div>
+            </div>
+            
+            <div class="right-panel">
+                <div class="panel-title"><i class="fas fa-key"></i> Your PIN Sequence</div>
+                
+                <div class="pin-display">
+                    <div class="pin-box empty" id="pin1">?</div>
+                    <div class="pin-box empty" id="pin2">?</div>
+                    <div class="pin-box empty" id="pin3">?</div>
+                    <div class="pin-box empty" id="pin4">?</div>
+                </div>
+                
+                <div class="form-container">
+                    <form method="POST" action="/login_stego_pin" id="pinForm">
+                        <input type="hidden" name="stego_pin" id="stego_pin" required>
+                        <button type="submit" class="btn btn-primary" id="submitBtn" disabled>
+                            <i class="fas fa-check-circle"></i> Verify PIN
+                        </button>
+                        <button type="button" class="btn btn-reset" onclick="resetSelection()">
+                            <i class="fas fa-redo"></i> Reset Selection
+                        </button>
+                    </form>
+                </div>
+                
+                <div class="security-info">
+                    <i class="fas fa-shield-alt"></i>
+                    This advanced security method uses steganography to hide your PIN within images.
+                    Only you know which images contain your PIN digits.
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const pinSequence = [];
+        const selectedImages = [];
+        const submitBtn = document.getElementById('submitBtn');
+        
+        function selectImage(num) {
+            if (pinSequence.length < 4 && !selectedImages.includes(num)) {
+                pinSequence.push(num);
+                selectedImages.push(num);
+                
+                // Update PIN display
+                document.getElementById(`pin${pinSequence.length}`).textContent = num;
+                document.getElementById(`pin${pinSequence.length}`).classList.remove('empty');
+                document.getElementById(`pin${pinSequence.length}`).classList.add('filled');
+                
+                // Mark image as selected
+                const imageBtns = document.querySelectorAll('.img-btn');
+                imageBtns.forEach(btn => {
+                    if (btn.onclick.toString().includes(num.toString())) {
+                        btn.classList.add('selected');
+                    }
+                });
+                
+                // Update hidden input
+                document.getElementById("stego_pin").value = pinSequence.join('');
+                
+                // Enable submit button if PIN is complete
+                if (pinSequence.length === 4) {
+                    submitBtn.disabled = false;
+                }
+            }
+        }
+        
+        function resetSelection() {
+            // Clear PIN sequence
+            pinSequence.length = 0;
+            selectedImages.length = 0;
+            
+            // Reset PIN display
+            for (let i = 1; i <= 4; i++) {
+                document.getElementById(`pin${i}`).textContent = '?';
+                document.getElementById(`pin${i}`).classList.remove('filled');
+                document.getElementById(`pin${i}`).classList.add('empty');
+            }
+            
+            // Remove selected class from images
+            document.querySelectorAll('.img-btn').forEach(btn => {
+                btn.classList.remove('selected');
+            });
+            
+            // Clear hidden input and disable submit
+            document.getElementById("stego_pin").value = '';
+            submitBtn.disabled = true;
+        }
+    </script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Login - Stage 3</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .container { display: flex; }
+        .left { flex: 1; padding: 20px; }
+        .right { flex: 1; padding: 20px; }
+        .pin-box { 
+            width: 50px; height: 50px; 
+            border: 1px solid #000; 
+            display: inline-block; 
+            text-align: center; 
+            line-height: 50px; 
+            margin: 5px; 
+        }
+        .img-btn { 
+            width: 100px; height: 100px; 
+            margin: 5px; 
+            cursor: pointer;
+            border: 2px solid #ddd;
+        }
+        .img-btn:hover {
+            border-color: #007bff;
+        }
+        .btn {
+            background: #007bff;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Login - Stage 3 (Verify Steganography PIN)</h1>
+    <div class="container">
+        <div class="left">
+            <h3>Select Your 4 PIN Images:</h3>
+            <div id="image-grid">
+                <img src="../static/iamge1.jpg" class="img-btn" onclick="checkImage(1)">
+                <img src="../static/image2.jpg" class="img-btn" onclick="checkImage(2)">
+                <img src="../static/image3.jpg" class="img-btn" onclick="checkImage(3)">
+                <img src="../static/image4.png" class="img-btn" onclick="checkImage(4)">
+                <img src="../static/image5.jpg" class="img-btn" onclick="checkImage(5)">
+                <img src="../static/image6.png" class="img-btn" onclick="checkImage(6)">
+                <img src="../static/image7.jpg" class="img-btn" onclick="checkImage(7)">
+                <img src="../static/image8.jpg" class="img-btn" onclick="checkImage(8)">
+                <img src="../static/image9.png" class="img-btn" onclick="checkImage(9)">
+                <img src="../static/image10.jpg" class="img-btn" onclick="checkImage(0)">
+            </div>
+        </div>
+        <div class="right">
+            <h3>Entered PIN:</h3>
+            <div id="pin-display">
+                <div class="pin-box" id="pin1">?</div>
+                <div class="pin-box" id="pin2">?</div>
+                <div class="pin-box" id="pin3">?</div>
+                <div class="pin-box" id="pin4">?</div>
+            </div>
+            <form method="POST" action="/login_stego_pin">
+                <input type="hidden" name="stego_pin" id="stego_pin" required>
+                <button type="submit" class="btn">Submit</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        let pin = [];
+        function checkImage(num) {
+            if (pin.length < 4) {
+                pin.push(num);
+                document.getElementById(`pin${pin.length}`).textContent = num;
+                document.getElementById("stego_pin").value = pin.join('');
+            }
+        }
+    </script>
+</body>
+</html> -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Login - Stage 3</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .container { display: flex; }
+        .left { flex: 1; padding: 20px; }
+        .right { flex: 1; padding: 20px; }
+        .pin-box { width: 50px; height: 50px; border: 1px solid #000; display: inline-block; text-align: center; line-height: 50px; margin: 5px; }
+        .img-btn { width: 100px; height: 100px; margin: 5px; cursor: pointer; }
+    </style>
+</head>
+<body>
+    <h1>Login - Stage 3 (Steganography PIN)</h1>
+    <div class="container">
+        <div class="left">
+            <h3>Select Images Matching Your PIN:</h3>
+            <div id="image-grid">
+                <img src="static/pin_images/1.jpg" class="img-btn" onclick="checkImage(1)">
+                <img src="static/pin_images/2.jpg" class="img-btn" onclick="checkImage(2)">
+            </div>
+        </div>
+        <div class="right">
+            <h3>Entered PIN:</h3>
+            <div id="pin-display">
+                <div class="pin-box" id="pin1">?</div>
+                <div class="pin-box" id="pin2">?</div>
+                <div class="pin-box" id="pin3">?</div>
+                <div class="pin-box" id="pin4">?</div>
+            </div>
+            <form method="POST" action="/login_stego_pin">
+                <input type="hidden" name="stego_pin" id="stego_pin" required>
+                <button type="submit" class="btn">Submit</button>
+            </form>
+        </div>
+    </div>
+    <script>
+        let pin = [];
+        function checkImage(num) {
+            if (pin.length < 4) {
+                pin.push(num);
+                document.getElementById(`pin${pin.length}`).textContent = num;
+                document.getElementById("stego_pin").value = pin.join('');
+            }
+        }
+    </script>
+</body>
+</html> -->

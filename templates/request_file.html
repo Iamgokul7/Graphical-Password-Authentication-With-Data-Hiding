@@ -1,0 +1,982 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Secure File Requests | SecureVault</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #4361ee;
+            --primary-light: #4895ef;
+            --secondary: #3f37c9;
+            --dark: #1a1a2e;
+            --light: #f8f9fa;
+            --gray: #6c757d;
+            --light-gray: #e9ecef;
+            --danger: #e63946;
+            --success: #4cc9f0;
+            --warning: #f8961e;
+            --border-radius: 12px;
+            --box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            --transition: all 0.3s ease;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f5f7fa;
+            color: var(--dark);
+            line-height: 1.6;
+        }
+        
+        .navbar {
+            background-color: white;
+            box-shadow: var(--box-shadow);
+            padding: 0 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 70px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .nav-brand {
+            display: flex;
+            align-items: center;
+            font-weight: 600;
+            font-size: 20px;
+            color: var(--primary);
+        }
+        
+        .nav-brand i {
+            margin-right: 10px;
+            font-size: 22px;
+        }
+        
+        .nav-links {
+            display: flex;
+            align-items: center;
+        }
+        
+        .nav-links a {
+            color: var(--dark);
+            text-decoration: none;
+            padding: 10px 15px;
+            margin: 0 5px;
+            font-weight: 500;
+            border-radius: var(--border-radius);
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+        }
+        
+        .nav-links a i {
+            margin-right: 8px;
+        }
+        
+        .nav-links a:hover {
+            background-color: var(--primary);
+            color: white;
+        }
+        
+        .nav-links a.active {
+            background-color: rgba(67, 97, 238, 0.1);
+            color: var(--primary);
+        }
+        
+        .user-profile {
+            display: flex;
+            align-items: center;
+            margin-left: 20px;
+        }
+        
+        .user-profile img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-right: 10px;
+            border: 2px solid var(--primary);
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 30px auto;
+            padding: 0 20px;
+        }
+        
+        .header {
+            margin-bottom: 30px;
+            text-align: center;
+        }
+        
+        .header h1 {
+            font-size: 28px;
+            font-weight: 600;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .header h1 i {
+            margin-right: 12px;
+            color: var(--primary);
+        }
+        
+        .header p {
+            color: var(--gray);
+            max-width: 700px;
+            margin: 0 auto;
+        }
+        
+        .section {
+            background-color: white;
+            border-radius: var(--border-radius);
+            padding: 25px;
+            box-shadow: var(--box-shadow);
+            margin-bottom: 30px;
+        }
+        
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid var(--light-gray);
+        }
+        
+        .section-title {
+            font-size: 20px;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+        }
+        
+        .section-title i {
+            margin-right: 10px;
+            color: var(--primary);
+        }
+        
+        .file-table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+        }
+        
+        .file-table thead th {
+            background-color: var(--light);
+            padding: 15px;
+            text-align: left;
+            font-weight: 500;
+            color: var(--gray);
+            border-bottom: 2px solid var(--light-gray);
+        }
+        
+        .file-table tbody tr {
+            transition: var(--transition);
+        }
+        
+        .file-table tbody tr:hover {
+            background-color: rgba(67, 97, 238, 0.03);
+        }
+        
+        .file-table td {
+            padding: 15px;
+            border-bottom: 1px solid var(--light-gray);
+            vertical-align: middle;
+        }
+        
+        .status {
+            display: inline-flex;
+            align-items: center;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 500;
+        }
+        
+        .status-pending {
+            background-color: rgba(248, 150, 30, 0.1);
+            color: var(--warning);
+        }
+        
+        .status-approved {
+            background-color: rgba(76, 201, 240, 0.1);
+            color: var(--success);
+        }
+        
+        .status-denied {
+            background-color: rgba(230, 57, 70, 0.1);
+            color: var(--danger);
+        }
+        
+        .status-none {
+            background-color: var(--light-gray);
+            color: var(--gray);
+        }
+        
+        .status-completed {
+            background-color: rgba(67, 97, 238, 0.1);
+            color: var(--primary);
+        }
+        
+        .btn {
+            padding: 8px 16px;
+            border-radius: var(--border-radius);
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: var(--transition);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .btn-primary {
+            background-color: var(--primary);
+            color: white;
+            border: none;
+        }
+        
+        .btn-primary:hover {
+            background-color: var(--secondary);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(67, 97, 238, 0.2);
+        }
+        
+        .btn-secondary {
+            background-color: white;
+            color: var(--primary);
+            border: 1px solid var(--primary);
+        }
+        
+        .btn-secondary:hover {
+            background-color: #f0f7ff;
+        }
+        
+        .btn i {
+            margin-right: 6px;
+        }
+        
+        .empty-state {
+            text-align: center;
+            padding: 40px 20px;
+            color: var(--gray);
+        }
+        
+        .empty-state i {
+            font-size: 40px;
+            margin-bottom: 15px;
+            color: var(--light-gray);
+        }
+        
+        .empty-state p {
+            margin-top: 10px;
+        }
+        
+        #loading {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            color: white;
+            display: none;
+        }
+        
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 5px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 1s ease-in-out infinite;
+            margin-bottom: 15px;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        .error-message {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: var(--danger);
+            color: white;
+            padding: 12px 24px;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            animation: slideIn 0.3s ease-out;
+        }
+        
+        .error-message i {
+            margin-right: 10px;
+        }
+        
+        @keyframes slideIn {
+            from { top: -100px; opacity: 0; }
+            to { top: 20px; opacity: 1; }
+        }
+        
+        @media (max-width: 768px) {
+            .navbar {
+                flex-direction: column;
+                height: auto;
+                padding: 15px;
+            }
+            
+            .nav-links {
+                margin-top: 15px;
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            
+            .user-profile {
+                margin: 15px 0 0;
+            }
+            
+            .file-table {
+                display: block;
+                overflow-x: auto;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-brand">
+            <i class="fas fa-lock"></i>
+            <span>SecureVault</span>
+        </div>
+        
+        <div class="nav-links">
+            <a href="/dashboard"><i class="fas fa-home"></i> Home</a>
+            <a href="/file_upload"><i class="fas fa-upload"></i> Upload</a>
+            <a href="/request_file" class="active"><i class="fas fa-file-download"></i> Request</a>
+            <a href="/settings"><i class="fas fa-cog"></i> Settings</a>
+            
+            <div class="user-profile">
+                <!-- <img src="https://ui-avatars.com/api/?name=User+Name&background=4361ee&color=fff" alt="User Profile">-->
+                  <img src="https://cdn-icons-png.flaticon.com/512/847/847969.png" width="64" height="64" alt="User Icon"> 
+                <span>Welcome User</span>
+            </div>
+        </div>
+    </nav>
+    
+    <div class="container">
+        <div class="header">
+            <h1><i class="fas fa-file-import"></i> Secure File Requests</h1>
+            <p>Request access to files or manage incoming requests with end-to-end encryption and permission controls</p>
+        </div>
+        
+        <div class="section">
+            <div class="section-header">
+                <div class="section-title">
+                    <i class="fas fa-folder-open"></i> Available Files
+                </div>
+            </div>
+            
+            {% if files %}
+            <div class="table-responsive">
+                <table class="file-table">
+                    <thead>
+                        <tr>
+                            <th>File ID</th>
+                            <th>Owner</th>
+                            <th>File Name</th>
+                            <th>Status</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for file in files %}
+                        <tr>
+                            <td>{{ file['id'] }}</td>
+                            <td>{{ file['owner_email'] }}</td>
+                            <td>{{ file['filename'] }}</td>
+                            <td>
+                                <span class="status status-{{ file['request_status'] }}">
+                                    {{ file['request_status']|capitalize }}
+                                </span>
+                            </td>
+                            <td>
+                                {% if file['request_status'] == 'none' %}
+                                    <button class="btn btn-primary" onclick="sendRequest({{ file['id'] }})">
+                                        <i class="fas fa-paper-plane"></i> Request
+                                    </button>
+                                {% elif file['request_status'] == 'pending' %}
+                                    <span class="status status-pending">
+                                        <i class="fas fa-clock"></i> Pending
+                                    </span>
+                                {% elif file['request_status'] == 'approved' %}
+                                    <button class="btn btn-primary" onclick="viewFile({{ file['id'] }})">
+                                        <i class="fas fa-eye"></i> View
+                                    </button>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {% else %}
+            <div class="empty-state">
+                <i class="fas fa-folder-open"></i>
+                <h3>No Files Available</h3>
+                <p>There are currently no files available for request</p>
+            </div>
+            {% endif %}
+        </div>
+        
+        <div class="section">
+            <div class="section-header">
+                <div class="section-title">
+                    <i class="fas fa-inbox"></i> Incoming Requests
+                </div>
+            </div>
+            
+            {% if requests %}
+            <div class="table-responsive">
+                <table class="file-table">
+                    <thead>
+                        <tr>
+                            <th>File Name</th>
+                            <th>Requested By</th>
+                            <th>Status</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for request in requests %}
+                        <tr>
+                            <td>{{ request['filename'] }}</td>
+                            <td>{{ request['requester_email'] }}</td>
+                            <td>
+                                <span class="status status-{{ request['status'] }}">
+                                    <i class="fas fa-{% if request['status'] == 'pending' %}clock{% elif request['status'] == 'approved' %}check-circle{% else %}times-circle{% endif %}"></i>
+                                    {{ request['status']|capitalize }}
+                                    {% if request['status'] == 'approved' %}
+                                        - {% if request['viewed'] %}Viewed{% else %}Not viewed{% endif %}
+                                    {% endif %}
+                                </span>
+                            </td>
+                            <td>
+                                {% if request['status'] == 'pending' %}
+                                    <button class="btn btn-primary" onclick="approveRequest({{ request['id'] }})">
+                                        <i class="fas fa-check"></i> Approve
+                                    </button>
+                                {% elif request['status'] == 'approved' %}
+                                    {% if request['viewed'] %}
+                                        <span class="status status-completed">
+                                            <i class="fas fa-check-double"></i> Completed
+                                        </span>
+                                    {% else %}
+                                        <span class="status status-pending">
+                                            <i class="fas fa-hourglass-half"></i> Waiting
+                                        </span>
+                                    {% endif %}
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {% else %}
+            <div class="empty-state">
+                <i class="fas fa-inbox"></i>
+                <h3>No Incoming Requests</h3>
+                <p>You don't have any pending file requests</p>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <div id="loading">
+        <div class="spinner"></div>
+        <p>Processing your request...</p>
+    </div>
+
+    <script>
+        function showError(message) {
+            const errorDiv = document.createElement('div');
+            errorDiv.className = 'error-message';
+            errorDiv.innerHTML = `<i class="fas fa-exclamation-circle"></i> ${message}`;
+            document.body.appendChild(errorDiv);
+            setTimeout(() => {
+                errorDiv.style.animation = 'slideIn 0.3s ease-out reverse';
+                setTimeout(() => errorDiv.remove(), 300);
+            }, 5000);
+        }
+
+        function sendRequest(fileId) {
+            if (!confirm('Are you sure you want to request access to this file?')) return;
+            
+            const loading = document.getElementById('loading');
+            loading.style.display = 'flex';
+            
+            fetch(`/request_file/${fileId}`, { 
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                credentials: 'same-origin'
+            })
+            .then(async response => {
+                loading.style.display = 'none';
+                
+                if (response.ok) {
+                    location.reload();
+                } else {
+                    try {
+                        const data = await response.json();
+                        showError(data.message || `Request failed with status ${response.status}`);
+                    } catch {
+                        showError(`Request failed with status ${response.status}`);
+                    }
+                }
+            })
+            .catch(error => {
+                loading.style.display = 'none';
+                showError('Network error: ' + error.message);
+            });
+        }
+        
+        function approveRequest(requestId) {
+            if (!confirm('Are you sure you want to approve this file request?')) return;
+            
+            const loading = document.getElementById('loading');
+            loading.style.display = 'flex';
+            
+            fetch(`/approve_request/${requestId}`, { 
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            })
+            .then(async response => {
+                loading.style.display = 'none';
+                if (response.ok) {
+                    location.reload();
+                } else {
+                    try {
+                        const data = await response.json();
+                        showError(data.message || 'Approval failed');
+                    } catch {
+                        showError('Approval failed: ' + response.statusText);
+                    }
+                }
+            })
+            .catch(error => {
+                loading.style.display = 'none';
+                showError('Error: ' + error.message);
+            });
+        }
+        
+        function viewFile(fileId) {
+            window.location.href = `/view_file/${fileId}`;
+        }
+    </script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Request Files</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .nav { background: #333; overflow: hidden; margin-bottom: 20px; }
+        .nav a { float: left; color: white; padding: 14px 16px; text-decoration: none; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+        th { background-color: #f2f2f2; }
+        .btn { 
+            background: #007bff; 
+            color: white; 
+            padding: 5px 10px; 
+            border: none; 
+            cursor: pointer;
+            margin: 2px;
+        }
+        .btn:hover { background: #0056b3; }
+        .status-pending { color: orange; font-weight: bold; }
+        .status-approved { color: green; font-weight: bold; }
+        .status-denied { color: red; font-weight: bold; }
+        .status-none { color: gray; }
+        #loading { 
+            position: fixed; 
+            top: 50%; 
+            left: 50%; 
+            transform: translate(-50%, -50%); 
+            background: rgba(0,0,0,0.8); 
+            color: white; 
+            padding: 20px; 
+            border-radius: 5px;
+        }
+        .error-message {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #ff4444;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 5px;
+            z-index: 1000;
+        }
+    </style>
+</head>
+<body>
+    <div class="nav">
+        <a href="/dashboard">Home</a>
+        <a href="/file_upload">Upload File</a>
+        <a href="/request_file">Request File</a>
+        <a href="/logout">Logout</a>
+    </div>
+    
+    <h1>Available Files</h1>
+    {% if files %}
+    <table>
+        <thead>
+            <tr>
+                <th>File ID</th>
+                <th>Owner</th>
+                <th>File Name</th>
+                <th>Status</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+
+            {% for file in files %}
+<tr>
+    <td>{{ file['id'] }}</td>
+    <td>{{ file['owner_email'] }}</td>
+    <td>{{ file['filename'] }}</td>
+    <td>{{ file['request_status'] }}</td>
+    <td>
+        {% if file['request_status'] == 'none' %}
+            <button class="btn" onclick="sendRequest({{ file['id'] }})">Request File</button>
+        {% elif file['request_status'] == 'pending' %}
+            <span class="status-pending">Request Pending</span>
+        {% elif file['request_status'] == 'approved' %}
+            <button class="btn" onclick="viewFile({{ file['id'] }})">View File</button>
+        {% endif %}
+    </td>
+</tr>
+{% endfor %}
+           
+        </tbody>
+    </table>
+    {% else %}
+    <p>No files available for request.</p>
+    {% endif %}
+
+    <h2>Incoming Requests</h2>
+    {% if requests %}
+    <table>
+        <thead>
+            <tr>
+                <th>File Name</th>
+                <th>Requested By</th>
+                <th>Status</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+
+            {% for request in requests %}
+<tr>
+    <td>{{ request['filename'] }}</td>
+    <td>{{ request['requester_email'] }}</td>
+    <td class="status-{{ request['status'] }}">
+        {{ request['status']|capitalize }}
+        {% if request['status'] == 'approved' %}
+            - {% if request['viewed'] %}Viewed{% else %}Not viewed{% endif %}
+        {% endif %}
+    </td>
+    <td>
+        {% if request['status'] == 'pending' %}
+            <button class="btn" onclick="approveRequest({{ request['id'] }})">Approve</button>
+        {% elif request['status'] == 'approved' %}
+            {% if request['viewed'] %}
+                <span class="status-completed">Completed</span>
+            {% else %}
+                <span class="status-pending">Waiting to view</span>
+            {% endif %}
+        {% endif %}
+    </td>
+</tr>
+{% endfor %}
+          
+        </tbody>
+    </table>
+    {% else %}
+    <p>No incoming requests.</p>
+    {% endif %}
+
+    <div id="loading" style="display: none;">Processing request...</div>
+
+    <script>
+        function showError(message) {
+            const errorDiv = document.createElement('div');
+            errorDiv.className = 'error-message';
+            errorDiv.textContent = message;
+            document.body.prepend(errorDiv);
+            setTimeout(() => errorDiv.remove(), 5000);
+        }
+
+        function sendRequest(fileId) {
+                if (!confirm('Are you sure you want to request this file?')) return;
+                
+                document.getElementById('loading').style.display = 'block';
+                
+                fetch(`/request_file/${fileId}`, { 
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    credentials: 'same-origin'
+                })
+                .then(async response => {
+                    document.getElementById('loading').style.display = 'none';
+                    
+                    if (response.ok) {
+                        location.reload();
+                    } else {
+                        try {
+                            const data = await response.json();
+                            showError(data.message || `Request failed with status ${response.status}`);
+                        } catch {
+                            showError(`Request failed with status ${response.status}`);
+                        }
+                    }
+                })
+                .catch(error => {
+                    document.getElementById('loading').style.display = 'none';
+                    showError('Network error: ' + error.message);
+                });
+            }
+
+        
+        function approveRequest(requestId) {
+            if (!confirm('Are you sure you want to approve this request?')) return;
+            
+            document.getElementById('loading').style.display = 'block';
+            
+            fetch(`/approve_request/${requestId}`, { 
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            })
+            .then(response => {
+                document.getElementById('loading').style.display = 'none';
+                if (response.ok) {
+                    location.reload();
+                } else {
+                    response.json().then(data => {
+                        showError(data.message || 'Approval failed');
+                    }).catch(() => {
+                        showError('Approval failed: ' + response.statusText);
+                    });
+                }
+            })
+            .catch(error => {
+                document.getElementById('loading').style.display = 'none';
+                showError('Error: ' + error.message);
+            });
+        }
+        
+        function viewFile(fileId) {
+            window.location.href = `/view_file/${fileId}`;
+        }
+    </script>
+</body>
+</html> -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
