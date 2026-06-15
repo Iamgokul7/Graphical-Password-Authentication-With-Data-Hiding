@@ -1,8 +1,8 @@
-\# Graphical Password Authentication With Data Hiding
+# Graphical Password Authentication With Data Hiding
 
 
 
-\## Overview
+## Overview
 
 
 
@@ -14,191 +14,191 @@ The system enhances traditional password-based authentication by combining graph
 
 
 
-\---
+---
 
 
 
-\## Features
+## Features
 
 
 
-\* Multi-Step User Authentication
+* Multi-Step User Authentication
 
-\* Graphical Password Verification
+* Graphical Password Verification
 
-\* Image-Based Authentication
+* Image-Based Authentication
 
-\* Steganography PIN Verification
+* Steganography PIN Verification
 
-\* AES File Encryption
+* AES File Encryption
 
-\* Secure File Upload
+* Secure File Upload
 
-\* Secure File Requests
+* Secure File Requests
 
-\* User Dashboard
+* User Dashboard
 
-\* Account Management
+* Account Management
 
-\* File Access Control
+* File Access Control
 
-\* SQLite Database Integration
+* SQLite Database Integration
 
 
 
-\---
+---
 
 
 
-\## Tech Stack
+## Tech Stack
 
 
 
-\### Backend
+### Backend
 
 
 
-\* Python
+* Python
 
-\* Flask
+* Flask
 
 
 
-\### Security Technologies
+### Security Technologies
 
 
 
-\* AES Encryption
+* AES Encryption
 
-\* DWT Steganography
+* DWT Steganography
 
-\* Graphical Password Authentication
+* Graphical Password Authentication
 
 
 
-\### Libraries
+### Libraries
 
 
 
-\* OpenCV
+* OpenCV
 
-\* NumPy
+* NumPy
 
-\* PyCryptodome
+* PyCryptodome
 
-\* PyWavelets
+* PyWavelets
 
 
 
-\### Database
+### Database
 
 
 
-\* SQLite
+* SQLite
 
 
 
-\### Frontend
+### Frontend
 
 
 
-\* HTML
+* HTML
 
-\* CSS
+* CSS
 
-\* JavaScript
+* JavaScript
 
 
 
-\---
+---
 
 
 
-\## Project Screenshots
+## Project Screenshots
 
 
 
-\### Home Page
+### Home Page
 
 
 
-!\[Home Page](screenshots/Starting\_Page.png)
+![Home Page](screenshots/Starting_Page.png)
 
 
 
-\### Registration Page
+### Registration Page
 
 
 
-!\[Registration Page](screenshots/Registration\_Page.png)
+![Registration Page](screenshots/Registration_Page.png)
 
 
 
-\### Login Page
+### Login Page
 
 
 
-!\[Login Page](screenshots/Login\_Page.png)
+![Login Page](screenshots/Login_Page.png)
 
 
 
-\### Steganography PIN Setup
+### Steganography PIN Setup
 
 
 
-!\[Steganography PIN Setup](screenshots/Stegnography\_Page.png)
+![Steganography PIN Setup](screenshots/Stegnography_Page.png)
 
 
 
-\### Image Verification
+### Image Verification
 
 
 
-!\[Image Verification](screenshots/Image\_Verification\_Page.png)
+![Image Verification](screenshots/Image_Verification_Page.png)
 
 
 
-\### Steganography PIN Verification
+### Steganography PIN Verification
 
 
 
-!\[Steganography PIN Verification](screenshots/Steganography\_PIN\_Verification\_Page.png)
+![Steganography PIN Verification](screenshots/Steganography_PIN_Verification_Page.png)
 
 
 
-\### Dashboard
+### Dashboard
 
 
 
-!\[Dashboard](screenshots/Dashboard\_Page.png)
+![Dashboard](screenshots/Dashboard_Page.png)
 
 
 
-\### Secure File Upload
+### Secure File Upload
 
 
 
-!\[Secure File Upload](screenshots/Secure\_File\_Upload\_Page.png)
+![Secure File Upload](screenshots/Secure_File_Upload_Page.png)
 
 
 
-\### Secure File Requests
+### Secure File Requests
 
 
 
-!\[Secure File Requests](screenshots/Secure\_File\_Requests\_Page.png)
+![Secure File Requests](screenshots/Secure_File_Requests_Page.png)
 
 
 
-\---
+---
 
 
 
-\## Installation
+## Installation
 
 
 
-\### Clone Repository
+### Clone Repository
 
 
 
@@ -210,7 +210,7 @@ git clone https://github.com/Iamgokul7/Graphical-Password-Authentication-With-Da
 
 
 
-\### Navigate to Project Folder
+### Navigate to Project Folder
 
 
 
@@ -222,7 +222,7 @@ cd Graphical-Password-Authentication-With-Data-Hiding
 
 
 
-\### Install Dependencies
+### Install Dependencies
 
 
 
@@ -234,7 +234,7 @@ pip install Flask numpy pycryptodome pywavelets opencv-python boto3
 
 
 
-\### Run Application
+### Run Application
 
 
 
@@ -246,7 +246,7 @@ python app.py
 
 
 
-\### Open Browser
+### Open Browser
 
 
 
@@ -258,11 +258,11 @@ http://127.0.0.1:5000
 
 
 
-\---
+---
 
 
 
-\## Project Structure
+## Project Structure
 
 
 
@@ -290,15 +290,15 @@ Graphical-Password-Authentication-With-Data-Hiding
 
 
 
-\---
+---
 
 
 
-\## Author
+## Author
 
 
 
-\*\*Gokul P\*\*
+**Gokul P**
 
 
 
